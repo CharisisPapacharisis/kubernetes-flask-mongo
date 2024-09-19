@@ -55,7 +55,7 @@ Helm is useful for **complex applications** that need reusable, configurable, an
 ## Flask Application
 
 This is the application folder structure: 
-
+```
 application/
 │
 ├── static/
@@ -68,6 +68,7 @@ application/
 │   └── update_todo.html
 │
 └── init.py
+```
 
 **Steps to reproduce**
 - Create a folder for your project. This folder will contain all the files and subfolders needed for your Flask app.
@@ -88,12 +89,15 @@ pip install Flask pymongo
     - update_todo.html: A form for updating existing to-do items.
 - Add any static assets (e.g. logos) in the `static/` folder.
 
+
 **Explanation of init.py**
+
 Initializes the Flask app. Then creates the connection to MongoDB, and tests that it is a successful connection. 
 The MongoDB URI, username, and password are retrieved from environment variables using `os.getenv()`.
 Then the code points to the "my_db" database and the "todos" collection where all your to-do items will be stored.
 
 **Routes and Views**
+
 - Home Route (/): Displays all the to-do items.
 - Add New To-Do Item (/add): Displays a form for adding a new to-do item and handles the form submission. This route handles both GET (displaying the form) and POST (submitting the form) requests. The submitted data is inserted into the MongoDB collection.
 - Delete To-Do Item (/delete/<id>): Deletes a specific to-do item based on its ID.
@@ -152,7 +156,7 @@ You can now verify that, by:
 docker ps
 ```
 
-Create the namespace "development"
+Create the namespace "development":
 ```bash
 kubectl create namespace development
 ```
@@ -196,6 +200,7 @@ kubectl exec -it <mongodb_pod_name> -- mongosh -u <username> -p <password> --aut
 ```
 
 Some commands that you can run, after connecting to mongodb: 
+
 `show dbs`
 
 `use my_db`
@@ -203,6 +208,7 @@ Some commands that you can run, after connecting to mongodb:
 `show collections`
 
 Choose your collection and type the following to see all contents of that collection:
+
 `db.todos.find()`
 
 Now that everything has been deployed, you can access the UI of the app, by finding its service, and forwarding it to localhost:
@@ -239,7 +245,7 @@ helm create helm-todoapp
 ```
 
 This will create a directory structure like this:
-
+```
 helm-todoapp/
   ├── charts/
   ├── templates/
@@ -249,7 +255,7 @@ helm-todoapp/
   │   └── secret.yaml
   ├── values.yaml
   └── Chart.yaml
-
+```
 Replace the default Kubernetes resource templates (e.g. Deployments, Services) inside the `templates/` folder with your own, and use template variables to allow customization.
 You can set those values as you prefer, utilizing the `values.yaml` file.
 
@@ -292,7 +298,7 @@ At the end, you can delete all resources. Find firstly which Helm releases are d
 helm list
 ```
 
-Use the helm uninstall command followed by the release name to remove the deployment and all associated resources.
+Use the helm uninstall command followed by the release name to remove the deployment and all associated resources:
 ```bash
 helm uninstall todoapp
 ```
