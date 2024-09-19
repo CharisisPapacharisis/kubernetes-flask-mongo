@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-config
+  namespace: development
+data:
+  mongo-url: mongodb-service #Dynamic allocation of the URL here
+

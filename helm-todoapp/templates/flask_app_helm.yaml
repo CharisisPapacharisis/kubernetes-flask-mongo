@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-web
+  labels:
+    app: todo
+spec:
+  replicas: {{ .Values.flask_app.replicas }}
+  selector:
+    matchLabels:
+      app: todo
+  template:
+    metadata:
+      labels:
+        app: todo
+    spec:
+      containers:
+        - name: todoapp
+          image: "{{ .Values.flask_app.image }}:{{ .Values.flask_app.tag }}"
+          imagePullPolicy: {{ .Values.flask_app.imagePullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.flask_app.containerPort }}
+          env:
+            - name: MONGO_CLIENT
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-config #this is a dynamic assignment of IP for the ClusterIP of the Mongo Service
+                  key:  mongo-url
+            - name: USERNAME
+              valueFrom: 
+                secretKeyRef:
+                  name: {{ .Release.Name }}-mongo-secret
+                  key: mongo-user
+            - name: PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: {{ .Release.Name }}-mongo-secret
+                  key: mongo-password               

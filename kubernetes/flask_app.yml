@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-todoapp
+  namespace: development
+  labels:
+    app: todo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo
+  template:
+    metadata:
+      labels:
+        app: todo
+    spec:
+      containers:
+      - name: todoapp
+        image: todoapp:1.0 #Pulled image from local Minikube registry, after building the image in it
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        #- name: MONGO_CLIENT
+        #  value: "10.105.191.73" #this is a static assignment of IP for the ClusterIP of the Mongo Service. This changes each time you delete the service
+        - name: MONGO_CLIENT
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-config #this is a dynamic assignment of IP for the ClusterIP of the Mongo Service!
+              key:  mongo-url
+        - name: USERNAME
+          valueFrom: 
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-user
+        - name: PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-password 
