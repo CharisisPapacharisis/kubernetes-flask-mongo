@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolumeClaim # a request for storage by a user
+metadata:
+  name: pvc
+  namespace: development
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  volumeName: mongo-data
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: v1
+kind: PersistentVolume # the physical volume on the machine
+metadata:
+  name: mongo-data
+  namespace: development
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /data/mongo

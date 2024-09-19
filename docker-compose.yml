@@ -1,0 +1,26 @@
+services:
+
+  web:
+    build: 
+      context: .
+    image: todoapp:1.0 #set the image name once it is build
+    ports:
+      - "5000:5000"
+    restart: always
+    depends_on:  #specify dependency (start order, and image pulling order)
+      - mongo
+
+  mongo:
+    image: mongo:jammy
+    hostname: test_mongodb
+    restart: always
+    volumes:
+      - myvolume:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: my_db
+      MONGO_INITDB_ROOT_USERNAME: USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: PASSWORD
+
+
+volumes:
+  myvolume:

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if todos[0] %}
+
+    <div class="container-lg">
+    <table class="table table-hover">
+        <tr>
+            <th class="text-center">Task Name</th> 
+            <th class="text-center">Status</th> 
+            <th class="text-center">Priority</th>
+            <th class="text-center">Date due</th>
+            <th class="text-center">Update</th>
+            <th class="text-center">Delete</th>
+        </tr>
+
+        {% for todo in todos %}
+            <tr class = "table-data">
+                
+                <td class="text-center"> {{ todo["task_name"] }} </td>
+                <td class="text-center"> {{ todo["status"] }} </td>
+                <td class="text-center" id="prio"> {{ todo["priority"] }} </td>
+                <td class="text-center"> {{ todo["date_due"] }} </td>
+                <td class="text-center"> <a href="./update/{{ todo['_id'] }}"> <img src="{{url_for('static', filename='modify_icon.png')}}" alt="Modify me" style="width: 20px; height: 20px;"> </a> </td>
+                <td class="text-center" id="delete_button"> <a href="./delete/{{ todo['_id'] }}" onclick="confirmation(event)"> <img src="{{url_for('static', filename='delete_icon.png')}}" alt="Delete me" style="width: 20px; height: 20px;"> </a> </td>
+
+
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+    {% else %}
+        <h4> You have not added tasks yet</h4>
+    {% endif %}
+
+<div class="container-lg">
+    <a href="{{ url_for('add') }}" class="btn btn-outline-primary">Add a task </a>
+</div>
+
+<!-- adding the javascript script for stopping the default behaviour of submit form. Fire the swal message, and THEN submit.-->
+<script type="text/javascript">
+    function confirmation(ev)
+    {
+        ev.preventDefault();
+        var urlToRedirect = ev.currentTarget.getAttribute('href');
+        console.log(urlToRedirect); 
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+            dangerMode: true,
+            }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = urlToRedirect;
+            }
+            });
+
+    }
+</script>
+
+
+{% endblock %}
+

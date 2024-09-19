@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-flask-service-np
+spec:
+  type: {{ .Values.flask_service.type }}
+  ports:
+    - port: {{ .Values.flask_service.port }}
+      targetPort: {{ .Values.flask_service.targetPort }} 
+      name: http
+  selector:
+    app: todo

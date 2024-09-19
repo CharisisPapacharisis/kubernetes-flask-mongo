@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>Here you can update your task:</p>
+
+<div class="container-md">
+
+    <form method='POST' id="update_form">
+        <label for="task_name" class = "form-label"> Task Name </label>
+        <input  name = "task_name" type = "text" class = "form-control" placeholder = task_name ></input><br>
+        <label for="status" class = "form-label"> Status </label>
+        <select  name = "status" class = "form-control" ></input><br>
+            <option value="" disabled selected>Select your option</option>
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+        </select><br>
+        <label for="priority" class = "form-label"> Priority </label>
+        <select  name = "priority" class = "form-control" >
+            <option value="" disabled selected>Select your option</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </select><br>
+        <label for="date_due" class = "form-label"> Date due </label>
+        <input  
+            name = "date_due" type = "text" class = "form-control" onfocus="(this.type='date')" onblur="(this.type='text')" placeholder = {{placeholder_date_due}}><br>
+        <button type="submit" id="update_button" class="btn btn-secondary">Submit</button>
+    </form>
+</div>
+
+
+<!-- adding the javascript script for stopping the default behaviour of submit form. Fire the swal message, and THEN submit.-->
+<script>
+    let button = document.getElementById("update_button")
+    let form = document.getElementById("update_form")
+
+    button.addEventListener("click", (e) => {
+        e.preventDefault();
+        swal.fire({
+            title:"Success!",
+            text:"A task was updated.",
+            icon:"success", 
+            button:"Ok" }
+        ).then( () => {
+        form.submit()
+        })
+    })
+</script>
+{% endblock %}

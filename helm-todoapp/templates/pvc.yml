@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: PersistentVolumeClaim # a request for storage by a user
+metadata:
+  name: {{ .Release.Name }}-pvc
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  volumeName: {{ .Release.Name }}-mongo-data
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: v1
+kind: PersistentVolume # the physical volume on the machine
+metadata:
+  name: {{ .Release.Name }}-mongo-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /data/mongo

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-mongodb
+  labels:
+    app: mongodb
+spec:
+  replicas: {{ .Values.mongo.replicas }}
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: "{{ .Values.mongo.image }}"
+          imagePullPolicy: {{ .Values.mongo.imagePullPolicy }}
+          env:  #retrieving the secrets from the Secrets file
+          - name: MONGO_INITDB_ROOT_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-mongo-secret
+                key: mongo-user
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-mongo-secret
+                key: mongo-password
+          ports:
+            - containerPort: {{ .Values.mongo.containerPort }}
+          volumeMounts:
+            - name: "mongo-data-dir"
+              mountPath: "/data/db"
+      volumes:
+        - name: "mongo-data-dir"
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-pvc
